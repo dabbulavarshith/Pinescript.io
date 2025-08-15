@@ -4,11 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PineScripter — Tech & Data Hub</title>
+
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Prism.js for Pine highlighting -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-pine.min.js"></script>
+
+  <!-- TradingView widget loader -->
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -18,10 +24,11 @@
         <div class="logo">📜 PineScripter</div>
         <div class="subtitle">Tech · Trading · Data · Research</div>
       </div>
+
       <div class="actions">
         <input id="search" placeholder="Search scripts, tags, code, or topics..." />
         <select id="categoryFilter"><option value="">All categories</option></select>
-        <button id="newScriptBtn" class="btn subtle">+ Add Script</button>
+        <button id="newScriptBtn" class="btn subtle">+ Add (local)</button>
       </div>
     </div>
   </header>
@@ -32,26 +39,28 @@
         <h4>Market Snapshot</h4>
         <div id="tv-widget"></div>
         <div style="margin-top:8px">
-          <a href="market.html" class="btn subtle" style="text-decoration:none">Full Screen Chart →</a>
+          <a href="/market.html" class="btn subtle" style="text-decoration:none">Open market full view →</a>
         </div>
+        <small class="muted">Change the TradingView symbol below</small>
+        <input id="tvSymbol" placeholder="TradingView symbol (e.g., NSE:NIFTY)" value="NSE:NIFTY" style="margin-top:4px;width:100%;padding:4px;"/>
       </div>
 
       <div class="card small">
-        <h4>Crypto (24h Trend)</h4>
+        <h4>Crypto (Live)</h4>
         <div class="metric">
-          <div><strong id="btcPrice">—</strong><div class="muted">BTC/USD</div></div>
-          <div><strong id="ethPrice">—</strong><div class="muted">ETH/USD</div></div>
+          <div><strong id="btcPrice">—</strong><div class="muted">BTC (USD)</div></div>
+          <div><strong id="ethPrice">—</strong><div class="muted">ETH (USD)</div></div>
         </div>
         <canvas id="cryptoChart" height="120"></canvas>
       </div>
 
       <div class="card small">
-        <h4>Indian Indices</h4>
+        <h4>Forex</h4>
         <div class="metric">
-          <div><strong id="nifty">—</strong><div class="muted">NIFTY 50</div></div>
-          <div><strong id="sensex">—</strong><div class="muted">SENSEX</div></div>
+          <div><strong id="usdInr">—</strong><div class="muted">USD → INR</div></div>
+          <div><strong id="eurInr">—</strong><div class="muted">EUR → INR</div></div>
         </div>
-        <canvas id="indiaChart" height="120"></canvas>
+        <canvas id="fxChart" height="120"></canvas>
       </div>
     </section>
 
@@ -65,26 +74,31 @@
           </div>
           <div id="grid"></div>
         </div>
+
+        <div class="card">
+          <h4>Data Hub</h4>
+          <p class="muted">You can add JSON/CSV files to <code>/data</code> in the repo and link them here. Useful for downloadable datasets, backtests and CSVs for research.</p>
+          <ul id="dataList"></ul>
+        </div>
       </aside>
 
       <section class="right-col">
         <div class="card">
-          <h4>Forex Rates</h4>
-          <div class="metric">
-            <div><strong id="usdInr">—</strong><div class="muted">USD/INR</div></div>
-            <div><strong id="eurInr">—</strong><div class="muted">EUR/INR</div></div>
-          </div>
-          <canvas id="fxChart" height="160"></canvas>
+          <h4>Tech & Market News</h4>
+          <div id="newsList"></div>
+          <small class="muted">Tip: Add your NewsAPI key to <code>scripts.js</code> to enable live news.</small>
         </div>
 
         <div class="card">
-          <h4>Market News</h4>
-          <div id="newsList"></div>
+          <h4>Site Analytics (Local)</h4>
+          <p class="muted">Views are counted locally (browser storage) to highlight trending scripts. For real tracking use GA4 or Plausible (instructions below).</p>
+          <canvas id="popularityChart" height="160"></canvas>
         </div>
       </section>
     </section>
   </main>
 
+  <!-- Modal -->
   <div id="modal" class="modal" aria-hidden="true">
     <div class="modal-body">
       <button id="close" class="btn close">✕</button>
@@ -94,7 +108,7 @@
       <pre><code id="mCode" class="language-pine"></code></pre>
       <div class="modal-actions">
         <button id="copyBtn" class="btn primary">Copy Code</button>
-        <a id="openTV" class="btn subtle" target="_blank" rel="noopener">Open in TradingView</a>
+        <a id="openTV" class="btn subtle" target="_blank" rel="noopener">Open in TradingView Editor</a>
       </div>
     </div>
   </div>
