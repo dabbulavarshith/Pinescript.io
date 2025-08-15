@@ -1,0 +1,14 @@
+[
+    {
+        "title": "Hull Moving Average",
+        "description": "A smooth, responsive moving average for trend analysis.",
+        "author": "Community",
+        "code": "//@version=5\nindicator(\"Hull Moving Average\", overlay=true)\nhmaValue = ta.hma(close, 20)\nplot(hmaValue, title=\"HMA\", color=color.aqua)"
+    },
+    {
+        "title": "RSI Indicator",
+        "description": "Measures momentum to identify overbought/oversold conditions.",
+        "author": "Community",
+        "code": "//@version=5\nindicator(\"RSI\", overlay=false)\nrsiValue = ta.rsi(close, 14)\nplot(rsiValue, title=\"RSI\", color=color.blue)\nhline(70, \"Overbought\", color=color.red)\nhline(30, \"Oversold\", color=color.green)"
+    }
+]
