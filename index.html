@@ -1,1 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PineScripter — PineScript Library</title>
 
+  <!-- Prism for PineScript highlighting -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-pine.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <h1 class="brand">📜 PineScripter</h1>
+      <div class="controls">
+        <input id="search" placeholder="Search title / tags / description / code..." />
+        <select id="categoryFilter"><option value="">All Categories</option></select>
+        <button id="newSample">+ Sample</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="grid" class="grid"></section>
+    <footer class="footer">Made with ♡ · Edit scripts in <code>scripts.js</code></footer>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-body">
+      <button id="close" class="close">✕</button>
+      <h2 id="mTitle"></h2>
+      <p id="mDesc"></p>
+      <div id="mTags" class="tags"></div>
+      <pre><code id="mCode" class="language-pine"></code></pre>
+      <div class="modal-actions">
+        <button id="copyBtn">Copy Code</button>
+        <a id="openInTV" target="_blank" rel="noopener noreferrer">Open in TradingView</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">Copied ✔</div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
