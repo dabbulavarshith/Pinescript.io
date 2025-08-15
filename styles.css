@@ -3,13 +3,26 @@ body {
     background: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
 }
 
+body.dark {
+    background: linear-gradient(to bottom, #1f2937, #111827);
+    color: #f3f4f6;
+}
+
+body.dark .bg-white {
+    background: #1f2937;
+}
+
+body.dark .text-gray-800 {
+    color: #f3f4f6;
+}
+
 .chart-container, .script-card {
     transition: all 0.3s ease-in-out;
 }
 
 .chart-container:hover, .script-card:hover {
     transform: scale(1.02);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 nav a {
@@ -40,4 +53,6 @@ button:hover {
 pre code {
     font-size: 0.9rem;
     line-height: 1.5;
+    max-height: 300px;
+    overflow-y: auto;
 }
