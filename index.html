@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduFinance - Ultimate Financial Education & Pine Script Library</title>
+    <title>EduFinance - Financial Education & Pine Script Library</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lightweight Charts CDN -->
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
     <!-- Prism.js for Pine Script highlighting -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-dark.min.css" rel="stylesheet" id="prism-theme">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" id="prism-theme">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-pinescript.min.js"></script>
     <link rel="stylesheet" href="styles.css">
@@ -17,7 +17,7 @@
 <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col transition-colors duration-300">
     <header class="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 shadow-lg sticky top-0 z-10">
         <div class="flex justify-between items-center">
-            <h1 class="text-4xl font-extrabold">EduFinance: Financial Learning & Pine Script Library</h1>
+            <h1 class="text-4xl font-extrabold">EduFinance: Financial Learning</h1>
             <button id="theme-toggle" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition">Toggle Dark Mode</button>
         </div>
         <nav class="mt-4 flex justify-center space-x-6">
@@ -32,8 +32,8 @@
 
     <main class="container mx-auto p-6 flex-grow">
         <section id="pine-library" class="mb-12">
-            <h2 class="text-3xl font-semibold mb-4">Pine Script Library (100+ Scripts)</h2>
-            <p class="mb-4">Explore our massive collection of Pine Scripts for educational analysis, sourced from community contributions.</p>
+            <h2 class="text-3xl font-semibold mb-4">Pine Script Library (100 Scripts)</h2>
+            <p class="mb-4">Explore 100 Pine Scripts for educational analysis.</p>
             <div class="mb-4 flex space-x-4">
                 <input id="script-search" type="text" placeholder="Search scripts..." class="p-2 rounded border w-full max-w-md">
                 <select id="script-filter" class="p-2 rounded border">
@@ -42,13 +42,15 @@
                     <option value="strategy">Strategies</option>
                 </select>
             </div>
-            <div id="script-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div id="script-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <p id="script-loading">Loading scripts...</p>
+            </div>
             <div id="pagination" class="mt-4 flex justify-center space-x-2"></div>
         </section>
 
         <section id="analysis" class="mb-12">
-            <h2 class="text-3xl font-semibold mb-4">Deep Market Analysis</h2>
-            <p class="mb-4">Visualize stock data with indicators like RSI, powered by Pine Scripts and Python analysis.</p>
+            <h2 class="text-3xl font-semibold mb-4">Market Analysis</h2>
+            <p class="mb-4">Visualize data with indicators like RSI.</p>
             <div id="chart-container" class="bg-white shadow-lg rounded-lg p-4 h-[500px]"></div>
             <div class="mt-4 flex space-x-4">
                 <button onclick="loadChart('candlestick')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Candlestick</button>
@@ -60,13 +62,13 @@
             <h2 class="text-3xl font-semibold mb-4">Educational Resources</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white p-6 rounded-lg shadow hover:shadow-xl transition">
-                    <h3 class="text-xl font-bold">Pine Script Mastery</h3>
-                    <p>Learn to create custom indicators and strategies with Pine Script.</p>
+                    <h3 class="text-xl font-bold">Pine Script Basics</h3>
+                    <p>Learn to create custom indicators and strategies.</p>
                     <a href="#pine-library" class="text-blue-500 hover:underline">Explore Library</a>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow hover:shadow-xl transition">
-                    <h3 class="text-xl font-bold">Technical Analysis Deep Dive</h3>
-                    <p>Understand momentum, trends, and support/resistance.</p>
+                    <h3 class="text-xl font-bold">Technical Analysis</h3>
+                    <p>Understand momentum and trends.</p>
                     <a href="#quiz" class="text-blue-500 hover:underline">Take Quiz</a>
                 </div>
             </div>
@@ -75,7 +77,7 @@
         <section id="quiz" class="mb-12">
             <h2 class="text-3xl font-semibold mb-4">Interactive Quizzes</h2>
             <div class="bg-white p-6 rounded-lg shadow">
-                <p class="mb-4">What does Pine Script’s <code>ta.rsi()</code> function calculate?</p>
+                <p class="mb-4">What does <code>ta.rsi()</code> calculate?</p>
                 <div class="space-y-2">
                     <button onclick="checkQuiz('Relative Strength Index', true)" class="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600 transition">Relative Strength Index</button>
                     <button onclick="checkQuiz('Moving Average', false)" class="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600 transition">Moving Average</button>
@@ -87,14 +89,14 @@
 
         <section id="premium" class="mb-12">
             <h2 class="text-3xl font-semibold mb-4">Premium Content</h2>
-            <p class="mb-4">Unlock exclusive Pine Script tutorials and advanced analysis tools.</p>
+            <p class="mb-4">Unlock exclusive Pine Script tutorials.</p>
             <button onclick="showPremiumPrompt()" class="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">Join Premium</button>
             <div id="ad-footer" class="mt-4 bg-yellow-200 p-2 rounded text-center text-gray-800">Google AdSense Placeholder</div>
         </section>
     </main>
 
     <footer class="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 text-center">
-        <p>&copy; 2025 EduFinance. Built for learning with 100+ Pine Scripts.</p>
+        <p>&copy; 2025 EduFinance. Built for learning.</p>
     </footer>
 
     <script src="script.js"></script>
