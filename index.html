@@ -3,30 +3,95 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PineScripter — PineScript Library</title>
+  <title>PineScripter — Tech & Data Hub</title>
 
-  <!-- Prism for PineScript highlighting -->
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Prism.js for Pine highlighting -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-pine.min.js"></script>
+
+  <!-- TradingView widget loader -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="topbar">
     <div class="wrap">
-      <h1 class="brand">📜 PineScripter</h1>
-      <div class="controls">
-        <input id="search" placeholder="Search title / tags / description / code..." />
-        <select id="categoryFilter"><option value="">All Categories</option></select>
-        <button id="newSample">+ Sample</button>
+      <div class="brand">
+        <div class="logo">📜 PineScripter</div>
+        <div class="subtitle">Tech · Trading · Data · Research</div>
+      </div>
+
+      <div class="actions">
+        <input id="search" placeholder="Search scripts, tags, code, or topics..." />
+        <select id="categoryFilter"><option value="">All categories</option></select>
+        <button id="newScriptBtn" class="btn subtle">+ Add (local)</button>
       </div>
     </div>
   </header>
 
   <main class="wrap">
-    <section id="grid" class="grid"></section>
-    <footer class="footer">Made with ♡ · Edit scripts in <code>scripts.js</code></footer>
+    <section class="grid-top">
+      <div class="card small">
+        <h4>Market Snapshot</h4>
+        <div id="tv-widget"></div>
+        <small class="muted">Change the TradingView symbol in <code>scripts.js</code></small>
+      </div>
+
+      <div class="card small">
+        <h4>Crypto (Live)</h4>
+        <div class="metric">
+          <div><strong id="btcPrice">—</strong><div class="muted">BTC (USD)</div></div>
+          <div><strong id="ethPrice">—</strong><div class="muted">ETH (USD)</div></div>
+        </div>
+        <canvas id="cryptoChart" height="120"></canvas>
+      </div>
+
+      <div class="card small">
+        <h4>Forex</h4>
+        <div class="metric">
+          <div><strong id="usdInr">—</strong><div class="muted">USD → INR</div></div>
+          <div><strong id="eurInr">—</strong><div class="muted">EUR → INR</div></div>
+        </div>
+        <canvas id="fxChart" height="120"></canvas>
+      </div>
+    </section>
+
+    <section class="main-area">
+      <aside class="left-col">
+        <div class="card">
+          <h4>Scripts Library</h4>
+          <div id="scriptControls" class="controls-row">
+            <input id="tagFilter" placeholder="Filter tags (comma separated)"/>
+            <button id="sortTrending" class="btn subtle">Sort: Trending</button>
+          </div>
+          <div id="grid"></div>
+        </div>
+
+        <div class="card">
+          <h4>Data Hub</h4>
+          <p class="muted">You can add JSON/CSV files to <code>/data</code> in the repo and link them here. Useful for downloadable datasets, backtests and CSVs for research.</p>
+          <ul id="dataList"></ul>
+        </div>
+      </aside>
+
+      <section class="right-col">
+        <div class="card">
+          <h4>Tech & Market News</h4>
+          <div id="newsList"></div>
+          <small class="muted">Tip: Add your NewsAPI key to <code>scripts.js</code> to enable live news.</small>
+        </div>
+
+        <div class="card">
+          <h4>Site Analytics (Local)</h4>
+          <p class="muted">Views are counted locally (browser storage) to highlight trending scripts. For real tracking use GA4 or Plausible (instructions below).</p>
+          <canvas id="popularityChart" height="160"></canvas>
+        </div>
+      </section>
+    </section>
   </main>
 
   <!-- Modal -->
@@ -34,17 +99,17 @@
     <div class="modal-body">
       <button id="close" class="close">✕</button>
       <h2 id="mTitle"></h2>
-      <p id="mDesc"></p>
+      <p id="mDesc" class="muted"></p>
       <div id="mTags" class="tags"></div>
       <pre><code id="mCode" class="language-pine"></code></pre>
       <div class="modal-actions">
-        <button id="copyBtn">Copy Code</button>
-        <a id="openInTV" target="_blank" rel="noopener noreferrer">Open in TradingView</a>
+        <button id="copyBtn" class="btn primary">Copy Code</button>
+        <a id="openTV" class="btn subtle" target="_blank" rel="noopener">Open in TradingView</a>
       </div>
     </div>
   </div>
 
-  <div id="toast" class="toast">Copied ✔</div>
+  <div id="toast" class="toast">Copied</div>
 
   <script src="scripts.js"></script>
 </body>
