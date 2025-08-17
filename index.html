@@ -1,126 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>PineScripter — Markets • Crypto • FX • Scripts</title>
-
-  <!-- Chart.js for charts -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- TradingView widgets -->
-  <script src="https://s3.tradingview.com/tv.js"></script>
-
-  <!-- Prism for PineScript syntax -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-pine.min.js"></script>
-
-  <link rel="stylesheet" href="styles.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PineScripts Hub</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="scripts.js" defer></script>
 </head>
 <body>
-<header class="topbar">
-  <div class="wrap">
-    <div class="brand">
-      <div class="logo">📜 PineScripter</div>
-      <div class="subtitle">Tech • Trading • Data</div>
-    </div>
-    <div class="actions">
-      <input id="search" placeholder="Search scripts, tags or code…"/>
-      <select id="categoryFilter"><option value="">All categories</option></select>
-      <input id="tagFilter" placeholder="Filter tags e.g. trend, ema"/>
-      <button id="newScriptBtn" class="btn subtle">+ Add (local)</button>
-    </div>
-  </div>
-</header>
+  <!-- Header -->
+  <header>
+    <h1>PineScripts Hub</h1>
+    <nav>
+      <a href="#stocks">Stocks</a>
+      <a href="#crypto">Crypto</a>
+      <a href="#scripts">Bulk Scripts</a>
+      <a href="#news">Market News</a>
+    </nav>
+  </header>
 
-<main class="wrap">
-  <!-- ===== MARKET SNAPSHOT ===== -->
-  <section class="grid-top">
-    <div class="card small">
-      <h4>Market Snapshot</h4>
-      <div class="row">
-        <select id="tvSymbol">
-          <option value="NSE:NIFTY">NSE:NIFTY</option>
-          <option value="NSE:BANKNIFTY">NSE:BANKNIFTY</option>
-          <option value="NSE:RELIANCE">NSE:RELIANCE</option>
-          <option value="NSE:HDFCBANK">NSE:HDFCBANK</option>
-          <option value="NASDAQ:AAPL">NASDAQ:AAPL</option>
-          <option value="NASDAQ:TSLA">NASDAQ:TSLA</option>
-        </select>
-        <a href="./market.html" class="btn subtle" style="text-decoration:none">Open full view →</a>
-      </div>
-      <div id="tv-widget" style="margin-top:8px;"></div>
-      <small class="muted">Tip: change the list in <code>scripts.js</code> → <code>TV_DEFAULTS</code>.</small>
-    </div>
-
-    <div class="card small">
-      <h4>Crypto (7-day)</h4>
-      <div class="metric">
-        <div><strong id="btcPrice">—</strong><div class="muted">BTC (USD)</div></div>
-        <div><strong id="ethPrice">—</strong><div class="muted">ETH (USD)</div></div>
-      </div>
-      <canvas id="cryptoChart" height="120"></canvas>
-    </div>
-
-    <div class="card small">
-      <h4>Forex</h4>
-      <div class="metric">
-        <div><strong id="usdInr">—</strong><div class="muted">USD → INR</div></div>
-        <div><strong id="eurInr">—</strong><div class="muted">EUR → INR</div></div>
-      </div>
-      <canvas id="fxChart" height="120"></canvas>
+  <!-- Stocks Section -->
+  <section id="stocks">
+    <h2>Stocks Dashboard</h2>
+    <div class="chart-container">
+      <iframe src="https://s.tradingview.com/widgetembed/?symbol=NSE:NIFTY"
+              frameborder="0"></iframe>
+      <iframe src="https://s.tradingview.com/widgetembed/?symbol=NSE:BANKNIFTY"
+              frameborder="0"></iframe>
     </div>
   </section>
 
-  <!-- ===== CONTENT ===== -->
-  <section class="main-area">
-    <aside class="left-col">
-      <div class="card">
-        <h4>Scripts Library</h4>
-        <div class="controls-row">
-          <button id="sortTrending" class="btn subtle">Sort: Trending</button>
-          <div class="muted">Loaded: <span id="scriptCount">0</span></div>
-        </div>
-        <div id="grid"></div>
-        <div id="pager" class="pager"></div>
-        <small class="muted">To bulk-load thousands, upload <code>/data/scripts.json</code> (format shown in <code>scripts.js</code>).</small>
-      </div>
-    </aside>
-
-    <section class="right-col">
-      <div class="card">
-        <h4>Tech & Market News</h4>
-        <div id="newsList"></div>
-        <small class="muted">Live via Hacker News API (works on GitHub Pages). For mainstream news you’ll need a small server/proxy due to CORS.</small>
-      </div>
-
-      <div class="card">
-        <h4>Site Analytics (Local)</h4>
-        <p class="muted">Local view counts drive “Trending”. Add GA4/Plausible later for real analytics.</p>
-        <canvas id="popularityChart" height="160"></canvas>
-      </div>
-    </section>
-  </section>
-</main>
-
-<!-- Modal -->
-<div id="modal" class="modal" aria-hidden="true">
-  <div class="modal-body">
-    <button id="close" class="close">✕</button>
-    <h2 id="mTitle"></h2>
-    <p id="mDesc" class="muted"></p>
-    <div id="mTags" class="tags"></div>
-    <pre><code id="mCode" class="language-pine"></code></pre>
-    <div class="modal-actions">
-      <button id="copyBtn" class="btn primary">Copy Code</button>
-      <a id="openTV" class="btn subtle" target="_blank" rel="noopener">Open in TradingView</a>
+  <!-- Crypto Section -->
+  <section id="crypto">
+    <h2>Crypto Dashboard</h2>
+    <div class="chart-grid">
+      <iframe src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:BTCUSDT"
+              frameborder="0"></iframe>
+      <iframe src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:ETHUSDT"
+              frameborder="0"></iframe>
+      <iframe src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:BNBUSDT"
+              frameborder="0"></iframe>
     </div>
-  </div>
-</div>
+  </section>
 
-<div id="toast" class="toast">Copied</div>
+  <!-- Bulk PineScripts Section -->
+  <section id="scripts">
+    <h2>Bulk PineScripts</h2>
+    <textarea id="bulkScripts" placeholder="Paste your PineScript code here..."></textarea>
+    <button onclick="saveScripts()">Save Scripts</button>
+    <pre id="savedScripts"></pre>
+  </section>
 
-<script src="scripts.js"></script>
+  <!-- Market News Section -->
+  <section id="news">
+    <h2>Market News</h2>
+    <div id="newsFeed">Loading news...</div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 PineScripts Hub. All rights reserved.</p>
+  </footer>
 </body>
 </html>
