@@ -1,104 +1,126 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduFinance - Financial Education & Pine Script Library</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lightweight Charts CDN -->
-    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
-    <!-- Prism.js for Pine Script highlighting -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" id="prism-theme">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-pinescript.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PineScripter — Markets • Crypto • FX • Scripts</title>
+
+  <!-- Chart.js for charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- TradingView widgets -->
+  <script src="https://s3.tradingview.com/tv.js"></script>
+
+  <!-- Prism for PineScript syntax -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-pine.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css"/>
 </head>
-<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col transition-colors duration-300">
-    <header class="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 shadow-lg sticky top-0 z-10">
-        <div class="flex justify-between items-center">
-            <h1 class="text-4xl font-extrabold">EduFinance: Financial Learning</h1>
-            <button id="theme-toggle" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition">Toggle Dark Mode</button>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">📜 PineScripter</div>
+      <div class="subtitle">Tech • Trading • Data</div>
+    </div>
+    <div class="actions">
+      <input id="search" placeholder="Search scripts, tags or code…"/>
+      <select id="categoryFilter"><option value="">All categories</option></select>
+      <input id="tagFilter" placeholder="Filter tags e.g. trend, ema"/>
+      <button id="newScriptBtn" class="btn subtle">+ Add (local)</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ===== MARKET SNAPSHOT ===== -->
+  <section class="grid-top">
+    <div class="card small">
+      <h4>Market Snapshot</h4>
+      <div class="row">
+        <select id="tvSymbol">
+          <option value="NSE:NIFTY">NSE:NIFTY</option>
+          <option value="NSE:BANKNIFTY">NSE:BANKNIFTY</option>
+          <option value="NSE:RELIANCE">NSE:RELIANCE</option>
+          <option value="NSE:HDFCBANK">NSE:HDFCBANK</option>
+          <option value="NASDAQ:AAPL">NASDAQ:AAPL</option>
+          <option value="NASDAQ:TSLA">NASDAQ:TSLA</option>
+        </select>
+        <a href="./market.html" class="btn subtle" style="text-decoration:none">Open full view →</a>
+      </div>
+      <div id="tv-widget" style="margin-top:8px;"></div>
+      <small class="muted">Tip: change the list in <code>scripts.js</code> → <code>TV_DEFAULTS</code>.</small>
+    </div>
+
+    <div class="card small">
+      <h4>Crypto (7-day)</h4>
+      <div class="metric">
+        <div><strong id="btcPrice">—</strong><div class="muted">BTC (USD)</div></div>
+        <div><strong id="ethPrice">—</strong><div class="muted">ETH (USD)</div></div>
+      </div>
+      <canvas id="cryptoChart" height="120"></canvas>
+    </div>
+
+    <div class="card small">
+      <h4>Forex</h4>
+      <div class="metric">
+        <div><strong id="usdInr">—</strong><div class="muted">USD → INR</div></div>
+        <div><strong id="eurInr">—</strong><div class="muted">EUR → INR</div></div>
+      </div>
+      <canvas id="fxChart" height="120"></canvas>
+    </div>
+  </section>
+
+  <!-- ===== CONTENT ===== -->
+  <section class="main-area">
+    <aside class="left-col">
+      <div class="card">
+        <h4>Scripts Library</h4>
+        <div class="controls-row">
+          <button id="sortTrending" class="btn subtle">Sort: Trending</button>
+          <div class="muted">Loaded: <span id="scriptCount">0</span></div>
         </div>
-        <nav class="mt-4 flex justify-center space-x-6">
-            <a href="#pine-library" class="hover:text-yellow-300 transition duration-300">Pine Script Library</a>
-            <a href="#analysis" class="hover:text-yellow-300 transition duration-300">Analysis Tools</a>
-            <a href="#resources" class="hover:text-yellow-300 transition duration-300">Resources</a>
-            <a href="#quiz" class="hover:text-yellow-300 transition duration-300">Quizzes</a>
-            <a href="#premium" class="hover:text-yellow-300 transition duration-300">Premium</a>
-        </nav>
-        <div id="ad-header" class="mt-4 text-center bg-yellow-200 p-2 rounded text-gray-800">Google AdSense Placeholder</div>
-    </header>
+        <div id="grid"></div>
+        <div id="pager" class="pager"></div>
+        <small class="muted">To bulk-load thousands, upload <code>/data/scripts.json</code> (format shown in <code>scripts.js</code>).</small>
+      </div>
+    </aside>
 
-    <main class="container mx-auto p-6 flex-grow">
-        <section id="pine-library" class="mb-12">
-            <h2 class="text-3xl font-semibold mb-4">Pine Script Library (100 Scripts)</h2>
-            <p class="mb-4">Explore 100 Pine Scripts for educational analysis.</p>
-            <div class="mb-4 flex space-x-4">
-                <input id="script-search" type="text" placeholder="Search scripts..." class="p-2 rounded border w-full max-w-md">
-                <select id="script-filter" class="p-2 rounded border">
-                    <option value="all">All Types</option>
-                    <option value="indicator">Indicators</option>
-                    <option value="strategy">Strategies</option>
-                </select>
-            </div>
-            <div id="script-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <p id="script-loading">Loading scripts...</p>
-            </div>
-            <div id="pagination" class="mt-4 flex justify-center space-x-2"></div>
-        </section>
+    <section class="right-col">
+      <div class="card">
+        <h4>Tech & Market News</h4>
+        <div id="newsList"></div>
+        <small class="muted">Live via Hacker News API (works on GitHub Pages). For mainstream news you’ll need a small server/proxy due to CORS.</small>
+      </div>
 
-        <section id="analysis" class="mb-12">
-            <h2 class="text-3xl font-semibold mb-4">Market Analysis</h2>
-            <p class="mb-4">Visualize data with indicators like RSI.</p>
-            <div id="chart-container" class="bg-white shadow-lg rounded-lg p-4 h-[500px]"></div>
-            <div class="mt-4 flex space-x-4">
-                <button onclick="loadChart('candlestick')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Candlestick</button>
-                <button onclick="loadChart('line')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Line Chart</button>
-            </div>
-        </section>
+      <div class="card">
+        <h4>Site Analytics (Local)</h4>
+        <p class="muted">Local view counts drive “Trending”. Add GA4/Plausible later for real analytics.</p>
+        <canvas id="popularityChart" height="160"></canvas>
+      </div>
+    </section>
+  </section>
+</main>
 
-        <section id="resources" class="mb-12">
-            <h2 class="text-3xl font-semibold mb-4">Educational Resources</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-xl transition">
-                    <h3 class="text-xl font-bold">Pine Script Basics</h3>
-                    <p>Learn to create custom indicators and strategies.</p>
-                    <a href="#pine-library" class="text-blue-500 hover:underline">Explore Library</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-xl transition">
-                    <h3 class="text-xl font-bold">Technical Analysis</h3>
-                    <p>Understand momentum and trends.</p>
-                    <a href="#quiz" class="text-blue-500 hover:underline">Take Quiz</a>
-                </div>
-            </div>
-        </section>
+<!-- Modal -->
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="modal-body">
+    <button id="close" class="close">✕</button>
+    <h2 id="mTitle"></h2>
+    <p id="mDesc" class="muted"></p>
+    <div id="mTags" class="tags"></div>
+    <pre><code id="mCode" class="language-pine"></code></pre>
+    <div class="modal-actions">
+      <button id="copyBtn" class="btn primary">Copy Code</button>
+      <a id="openTV" class="btn subtle" target="_blank" rel="noopener">Open in TradingView</a>
+    </div>
+  </div>
+</div>
 
-        <section id="quiz" class="mb-12">
-            <h2 class="text-3xl font-semibold mb-4">Interactive Quizzes</h2>
-            <div class="bg-white p-6 rounded-lg shadow">
-                <p class="mb-4">What does <code>ta.rsi()</code> calculate?</p>
-                <div class="space-y-2">
-                    <button onclick="checkQuiz('Relative Strength Index', true)" class="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600 transition">Relative Strength Index</button>
-                    <button onclick="checkQuiz('Moving Average', false)" class="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600 transition">Moving Average</button>
-                    <button onclick="checkQuiz('Volume Profile', false)" class="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600 transition">Volume Profile</button>
-                </div>
-                <p id="quiz-result" class="mt-4 font-semibold"></p>
-            </div>
-        </section>
+<div id="toast" class="toast">Copied</div>
 
-        <section id="premium" class="mb-12">
-            <h2 class="text-3xl font-semibold mb-4">Premium Content</h2>
-            <p class="mb-4">Unlock exclusive Pine Script tutorials.</p>
-            <button onclick="showPremiumPrompt()" class="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">Join Premium</button>
-            <div id="ad-footer" class="mt-4 bg-yellow-200 p-2 rounded text-center text-gray-800">Google AdSense Placeholder</div>
-        </section>
-    </main>
-
-    <footer class="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 text-center">
-        <p>&copy; 2025 EduFinance. Built for learning.</p>
-    </footer>
-
-    <script src="script.js"></script>
+<script src="scripts.js"></script>
 </body>
 </html>
