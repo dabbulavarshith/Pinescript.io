@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Market — Full View | PineScripter</title>
+  <link rel="stylesheet" href="./styles.css"/>
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <style>
+    body{background:#071021;color:#e6eef6;margin:0;font-family:Inter,system-ui,Roboto,Arial}
+    .wrap{max-width:1200px;margin:0 auto;padding:16px}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    header h1{margin:0}
+    .grid-2{display:grid;grid-template-columns:1fr 380px;gap:14px}
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+    .symbols{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .sym{padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02);cursor:pointer}
+    @media(max-width:960px){.grid-2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="./" style="color:#9aa4b2;text-decoration:none;font-size:14px">← Home</a>
+      <h1>Market — Full View</h1>
+    </header>
+
+    <section class="grid-2">
+      <div class="panel">
+        <div id="tv-large" style="height:620px;width:100%"></div>
+        <div style="margin-top:10px">
+          <strong>Quick symbols:</strong>
+          <div class="symbols" id="quickSymbols"></div>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <h4>Selected symbol</h4>
+        <div id="selectedSymbol" style="font-weight:600">—</div>
+        <div style="margin-top:12px">
+          <button id="btn-1m" class="sym">1m</button>
+          <button id="btn-5m" class="sym">5m</button>
+          <button id="btn-1h" class="sym">1h</button>
+          <button id="btn-1d" class="sym">1D</button>
+        </div>
+
+        <hr style="margin:12px 0;border-color:rgba(255,255,255,0.03)"/>
+        <h4>Top India symbols</h4>
+        <div id="indiaList" class="symbols"></div>
+      </aside>
+    </section>
+  </div>
+
+  <script>
+    // url param support ?tvwidgetsymbol=EXCHANGE:SYMBOL
+    const urlSym = new URLSearchParams(location.search).get("tvwidgetsymbol");
+
+    const QUICK = ["NSE:NIFTY","NSE:BANKNIFTY","NSE:RELIANCE","NSE:INFY","NSE:TCS","NSE:HDFCBANK","NASDAQ:NVDA","NASDAQ:AAPL"];
+    const INDIA = ["NSE:RELIANCE","NSE:INFY","NSE:TCS","NSE:HDFCBANK","NSE:SBIN","NSE:ITC","NSE:LT","NSE:WIPRO"];
+
+    let currentSymbol = urlSym || QUICK[0];
+
+    function createWidget(symbol, interval='60'){
+      document.getElementById('tv-large').innerHTML = '';
+      new TradingView.widget({
+        "width":"100%", "height":620, "symbol": symbol,
+        "interval": interval, "timezone":"Asia/Kolkata", "theme":"dark",
+        "style":"1", "locale":"en", "container_id":"tv-large", "allow_symbol_change":true
+      });
+      currentSymbol = symbol;
+      document.getElementById('selectedSymbol').textContent = symbol;
+    }
+
+    function addButtons(list, containerId){
+      const wrap = document.getElementById(containerId);
+      list.forEach(sym=>{
+        const b=document.createElement('div');
+        b.className='sym'; b.textContent=sym; b.onclick=()=>createWidget(sym,'60'); wrap.appendChild(b);
+      });
+    }
+
+    addButtons(QUICK, 'quickSymbols');
+    addButtons(INDIA, 'indiaList');
+
+    document.getElementById("btn-1m").onclick = ()=> createWidget(currentSymbol,'1');
+    document.getElementById("btn-5m").onclick = ()=> createWidget(currentSymbol,'5');
+    document.getElementById("btn-1h").onclick = ()=> createWidget(currentSymbol,'60');
+    document.getElementById("btn-1d").onclick = ()=> createWidget(currentSymbol,'D');
+
+    createWidget(currentSymbol,'60');
+  </script>
+</body>
+</html>
